@@ -1,0 +1,4 @@
+The checked out libpcre2/libpcre2/pcre2.h will be overwritten during the build
+process but these changes should be ignored. To do this automatically, run:
+
+git update-index --assume-unchanged libpcre2/libpcre2/config.h

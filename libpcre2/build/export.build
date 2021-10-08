@@ -1,0 +1,6 @@
+$out_root/
+{
+  include libpcre2/
+}
+
+export $out_root/libpcre2/$import.target

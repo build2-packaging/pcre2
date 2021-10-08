@@ -1,0 +1,15 @@
+: 1
+name: libpcre2
+version: 10.38.0-a.0.z
+upstream-version: 10.38
+project: pcre2
+summary: Perl-Compatible Regular Expressions
+license: other: PCRE2 LICENCE
+description-file: README
+url: https://www.pcre.org/
+src-url: https://github.com/PhilipHazel/pcre2
+email: pcre2-dev@googlegroups.com   ; Mailing list.
+package-email: packaging@build2.org ; Mailing list.
+build-error-email: builds@build2.org
+depends: * build2 >= 0.14.0-
+depends: * bpkg >= 0.14.0-
