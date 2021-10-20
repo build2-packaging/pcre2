@@ -1,9 +1,13 @@
 : 1
 name: libpcre2
+
+# Note: remember to update release_date in build/bootstrap.build.
+#
 version: 10.38.0-a.0.z
 upstream-version: 10.38
+
 project: pcre2
-summary: Perl-Compatible Regular Expressions
+summary: Perl-compatible regular expression library
 license: other: PCRE2 LICENCE
 description-file: README
 url: https://www.pcre.org/

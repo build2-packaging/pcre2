@@ -1,0 +1,53 @@
+assert ($release_date != [null]) "release_date must be specified"
+
+c.poptions =+ "-I$out_base" "-I$src_base" -DHAVE_CONFIG_H
+
+for w: 8 16 32
+{
+  lib = pcre2-$w # Current library's name.
+  src = src-$w   # Current library's source directory.
+
+  ./: lib{$lib}: h{pcre2 config} $src/{h c}{* -pcre2_jit_match -pcre2_jit_misc}
+
+  # Include in the distribution files that are #include'd.
+  #
+  lib{$lib}: $src/c{pcre2_jit_match pcre2_jit_misc} \
+             $src/sljit/{h c}{*}: include = adhoc
+
+  $src/obj{*}:  c.poptions += -DPCRE2_CODE_UNIT_WIDTH=$w
+  $src/obja{*}: c.poptions += -DPCRE2_STATIC
+
+  lib{$lib}:  c.export.poptions += "-I$out_base" -DPCRE2_CODE_UNIT_WIDTH=$w
+  liba{$lib}: c.export.poptions += -DPCRE2_STATIC
+}
+
+h{pcre2}: in{pcre2}
+{
+  in.symbol = '@'
+  PCRE2_MAJOR = "$version.major"
+  PCRE2_MINOR = "$version.minor"
+  PCRE2_PRERELEASE = ''
+  PCRE2_DATE = "$release_date"
+
+  # Include the generated header into the distribution (so that we don't pick
+  # up an installed one) and don't remove it when cleaning in src (so that
+  # clean results in a state identical to distributed).
+  #
+  dist  = true
+  clean = ($src_root != $out_root)
+}
+
+# For pre-releases use the complete version to make sure they cannot be used
+# in place of another pre-release or the final version. See the version module
+# for details on the version.* variable values.
+#
+if $version.pre_release
+  lib{pcre2-8 pcre2-16 pcre2-32}: bin.lib.version = "-$version.project_id"
+else
+  lib{pcre2-8 pcre2-16 pcre2-32}: \
+    bin.lib.version = "-$version.major.$version.minor"
+
+# Install only the pcre2.h header (shared by all the libraries).
+#
+h{*}: install = false
+h{pcre2}: install = include/

@@ -1,5 +1,9 @@
 project = libpcre2
 
+# Extracted from upstream configure.ac.
+#
+release_date = 2021-10-01
+
 using version
 using config
 using test
