@@ -2,6 +2,8 @@ assert ($release_date != [null]) "release_date must be specified"
 
 c.poptions =+ "-I$out_base" "-I$src_base" -DHAVE_CONFIG_H
 
+# Define the lib{pcre2-8 pcre2-16 pcre2-32} targets.
+#
 for w: 8 16 32
 {
   lib = pcre2-$w # Current library's name.

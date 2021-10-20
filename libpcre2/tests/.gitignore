@@ -1,6 +1,8 @@
 # Test executables.
 #
-driver
+driver-8
+driver-16
+driver-32
 
 # Testscript output directories (can be symlinks).
 #
