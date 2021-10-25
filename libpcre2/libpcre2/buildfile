@@ -7,17 +7,24 @@ c.poptions =+ "-I$out_base" "-I$src_base" -DHAVE_CONFIG_H
 for w: 8 16 32
 {
   lib = pcre2-$w # Current library's name.
-  src = src-$w   # Current library's source directory.
 
-  ./: lib{$lib}: h{pcre2 config} $src/{h c}{* -pcre2_jit_match -pcre2_jit_misc}
+  ./: lib{$lib}: h{pcre2 config} src/h{*}
 
   # Include in the distribution files that are #include'd.
   #
-  lib{$lib}: $src/c{pcre2_jit_match pcre2_jit_misc} \
-             $src/sljit/{h c}{*}: include = adhoc
+  lib{$lib}: src/c{pcre2_jit_match pcre2_jit_misc} \
+             src/sljit/{h c}{*}: include = adhoc
 
-  $src/obj{*}:  c.poptions += -DPCRE2_CODE_UNIT_WIDTH=$w
-  $src/obja{*}: c.poptions += -DPCRE2_STATIC
+  # Build each object with the current code unit width.
+  #
+  for s: src/c{* -{pcre2_jit_match pcre2_jit_misc}}
+  {
+    o = $name($s)-$w # Object name.
+
+    lib{$lib}: src/obj{$o}: $s
+    src/obj{$o}:  c.poptions += -DPCRE2_CODE_UNIT_WIDTH=$w
+    src/obja{$o}: c.poptions += -DPCRE2_STATIC
+  }
 
   lib{$lib}:  c.export.poptions += "-I$out_base" -DPCRE2_CODE_UNIT_WIDTH=$w
   liba{$lib}: c.export.poptions += -DPCRE2_STATIC
