@@ -3,7 +3,7 @@ name: libpcre2
 
 # Note: remember to update release_date in build/bootstrap.build.
 #
-version: 10.38.0
+version: 10.38.0+1
 upstream-version: 10.38
 
 project: pcre2
