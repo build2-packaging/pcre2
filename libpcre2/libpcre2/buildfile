@@ -15,20 +15,18 @@ for w: 8 16 32
   lib{$lib}: src/c{pcre2_jit_match pcre2_jit_misc} \
              src/sljit/{h c}{*}: include = adhoc
 
-  # Build each object with the current code unit width.
+  # Build each object file with the current code unit width.
   #
-  for s: src/c{* -{pcre2_jit_match pcre2_jit_misc}}
-  {
-    o = $name($s)-$w # Object name.
+  for s: src/c{* -pcre2_jit_match -pcre2_jit_misc}
+    lib{$lib}: src/obj{$name($s)-$w}: $s
 
-    lib{$lib}: src/obj{$o}: $s
-    src/obj{$o}:  c.poptions += -DPCRE2_CODE_UNIT_WIDTH=$w
-    src/obja{$o}: c.poptions += -DPCRE2_STATIC
-  }
+  src/obj{*-$w}: c.poptions += -DPCRE2_CODE_UNIT_WIDTH=$w
 
   lib{$lib}:  c.export.poptions += "-I$out_base" -DPCRE2_CODE_UNIT_WIDTH=$w
   liba{$lib}: c.export.poptions += -DPCRE2_STATIC
 }
+
+src/obja{*}: c.poptions += -DPCRE2_STATIC
 
 h{pcre2}: in{pcre2}
 {
